@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QKeyEvent>
 #include <QList>
+#include <QRandomGenerator>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -41,9 +42,13 @@ private:
     const int GRID_SIZE = 20;
 
     QList<QGraphicsRectItem*> snake;
+    QGraphicsRectItem *apple = nullptr;
+
     Direction currentDirection;
     QTimer *gameTimer;
 
     void initSnake();
+
+    void spawnApple();
 };
 #endif // MAINWINDOW_H

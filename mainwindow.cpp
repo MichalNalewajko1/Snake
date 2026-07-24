@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
     currentDirection = Direction::RIGHT;
     initSnake();
 
+    spawnApple();
+
     gameTimer = new QTimer(this);
     connect(gameTimer, &QTimer::timeout, this, &MainWindow::moveSnake);
     gameTimer->start(150);
@@ -95,4 +97,21 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         QMainWindow::keyPressEvent(event);
         break;
     }
+}
+
+void MainWindow::spawnApple()
+{
+    int maxGridX = BOARD_WIDTH / GRID_SIZE;
+    int maxGridY = BOARD_HEIGHT / GRID_SIZE;
+
+    int randomX = QRandomGenerator::global()->bounded(maxGridX) * GRID_SIZE;
+    int randomY = QRandomGenerator::global()->bounded(maxGridY) * GRID_SIZE;
+
+    if (!apple) {
+        apple = scene->addRect(0, 0, GRID_SIZE - 1, GRID_SIZE - 1,
+                               QPen(Qt::NoPen),
+                               QBrush(QColor(243, 139, 168)));
+    }
+
+    apple->setPos(randomX, randomY);
 }
