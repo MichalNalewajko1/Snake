@@ -9,6 +9,7 @@
 #include <QKeyEvent>
 #include <QList>
 #include <QRandomGenerator>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -47,8 +48,11 @@ private:
     Direction currentDirection;
     QTimer *gameTimer;
 
+    int score = 0;
+
     void initSnake();
 
     void spawnApple();
+    void gameOver();
 };
 #endif // MAINWINDOW_H

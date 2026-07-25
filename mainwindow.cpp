@@ -64,6 +64,32 @@ void MainWindow::moveSnake()
     case Direction::RIGHT: newX += GRID_SIZE; break;
     }
 
+    if (newX < 0 || newX >= BOARD_WIDTH || newY < 0 || newY >= BOARD_HEIGHT) {
+        gameOver();
+        return;
+    }
+
+    for (int i = 0; i < snake.size(); ++i) {
+        if (snake[i]->pos() == QPointF(newX, newY)) {
+            gameOver();
+            return;
+        }
+    }
+
+    if (apple && apple->pos() == QPointF(newX, newY)) {
+
+        QGraphicsRectItem *newSegment = scene->addRect(0, 0, GRID_SIZE - 1, GRID_SIZE - 1,
+                                                       QPen(Qt::NoPen),
+                                                       QBrush(QColor(166, 227, 161)));
+
+        newSegment->setPos(snake.last()->pos());
+        snake.append(newSegment);
+
+        score += 10;
+        setWindowTitle(QString("Snake Game - Wynik: %1").arg(score));
+        spawnApple();
+    }
+
     for (int i = snake.size() - 1; i > 0; --i) {
         snake[i]->setPos(snake[i - 1]->pos());
     }
@@ -114,4 +140,17 @@ void MainWindow::spawnApple()
     }
 
     apple->setPos(randomX, randomY);
+}
+
+void MainWindow::gameOver()
+{
+    gameTimer->stop();
+
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle("Koniec Gry!");
+    msgBox.setText(QString("Przegrałeś!\nTwój wynik to: %1 punktów.").arg(score));
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.exec();
+
+    close();
 }
